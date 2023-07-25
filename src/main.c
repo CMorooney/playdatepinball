@@ -144,6 +144,13 @@ bool is_button_pressed(PDButtons button) {
   return false;
 }
 
+bool is_button_released(PDButtons button) {
+  if(button & buttons_released) {
+    return true;
+  }
+  return false;
+}
+
 void increment_flipper_frame(int by) {
   int temp = current_flipper_frame+by;
   if(temp > 0 && temp < 6) {
@@ -161,9 +168,9 @@ static int update(void* userdata) {
     reset_ball_pos(true);
   }
 
-  if(is_button_pressed(kButtonUp)) {
+  if(is_button_released(kButtonUp)) {
     increment_flipper_frame(1);
-  } else if (is_button_pressed(kButtonDown)) {
+  } else if (is_button_released(kButtonDown)) {
     increment_flipper_frame(-1);
   }
 
