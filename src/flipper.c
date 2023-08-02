@@ -21,14 +21,14 @@ void init_flippers(PlaydateAPI* playdate) {
   //right flipper
   flipper_r_sprite = pd->sprite->newSprite();
   pd->sprite->setImage(flipper_r_sprite, pd->graphics->getTableBitmap(flipper_bmp_table, 0), kBitmapUnflipped);
-  pd->sprite->moveTo(flipper_r_sprite, SCREEN_MID_X + 50, SCREEN_MID_Y+80);
+  pd->sprite->moveTo(flipper_r_sprite, SCREEN_MID_X + 50, SCREEN_MID_Y+60);
   PDRect f_cr = { .x=0, .y=0, .width=100, .height=100 };
   pd->sprite->setCollideRect(flipper_r_sprite, f_cr);
   pd->sprite->addSprite(flipper_r_sprite);
 
   //left flipper
   flipper_l_sprite = pd->sprite->newSprite();
-  pd->sprite->moveTo(flipper_l_sprite, SCREEN_MID_X-50, SCREEN_MID_Y+80);
+  pd->sprite->moveTo(flipper_l_sprite, SCREEN_MID_X-50, SCREEN_MID_Y+60);
   pd->sprite->setCollideRect(flipper_l_sprite, (PDRect){ .x=0, .y=0, .width=100, .height=100 });
   pd->sprite->setImage(flipper_l_sprite, pd->graphics->getTableBitmap(flipper_bmp_table, 0), kBitmapFlippedX);
   pd->sprite->setImageFlip(flipper_l_sprite, kBitmapFlippedX);

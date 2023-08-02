@@ -2,11 +2,14 @@
 #include "constants.h"
 #include "types.h"
 
-#define HALF_BALL_SIZE 10
-#define BALL_MIN_X HALF_BALL_SIZE
-#define BALL_MAX_X LCD_COLUMNS-HALF_BALL_SIZE
-#define BALL_MIN_Y HALF_BALL_SIZE
-#define BALL_MAX_Y LCD_ROWS-HALF_BALL_SIZE
+#define BALL_RADIUS 10
+#define BALL_MIN_X BALL_RADIUS
+#define BALL_MIN_Y BALL_RADIUS
+#define BALL_MAX_X LCD_COLUMNS-BALL_RADIUS
+#define BALL_MAX_Y LCD_ROWS-BALL_RADIUS
+
+#define BALL_T_VELOCITY 3
+#define BALL_ACCEL 0.1f
 
 Vector current_vector;
 
@@ -30,7 +33,7 @@ void init_ball(PlaydateAPI* playdate) {
   pd->sprite->setCollisionResponseFunction(ball_sprite, ball_collider_handler);
   pd->sprite->addSprite(ball_sprite);
 
-  current_vector = (Vector){ .x=0, .y=-1 };
+  current_vector = (Vector){ .x=0, .y=0 };
 }
 
 void reset_ball_pos(void) {
@@ -42,20 +45,25 @@ void ball_move(int xBy, int yBy) {
 
   float moveTargetX, moveTargetY;
   int colliders_len;
+  int x_modifier = xBy < 0 ? -BALL_RADIUS : BALL_RADIUS;
+  int y_modifier = yBy < 0 ? -BALL_RADIUS : BALL_RADIUS;
+  int new_x = ball_bounds.x + x_modifier + xBy;
+  int new_y = ball_bounds.y + y_modifier + yBy;
+
+
   SpriteCollisionInfo* collision = pd->sprite->checkCollisions(ball_sprite,
-                                                               ball_bounds.x + ball_bounds.width/2 + xBy,
-                                                               ball_bounds.y + ball_bounds.height/2 + yBy,
+                                                               new_x,
+                                                               new_y,
                                                                &moveTargetX,
                                                                &moveTargetY,
                                                                &colliders_len);
-
   if(collision != NULL && collision->other != NULL) {
     PDRect collider_bounds = pd->sprite->getBounds(collision->other);
     LCDBitmap* colliderBmp = pd->sprite->getImage(collision->other);
 
     int alpha_collide = pd->graphics->checkMaskCollision(ball_bmp,
-                                                         ball_bounds.x,
-                                                         ball_bounds.y,
+                                                         new_x,
+                                                         new_y,
                                                          kBitmapUnflipped,
                                                          colliderBmp,
                                                          collider_bounds.x,
@@ -63,6 +71,7 @@ void ball_move(int xBy, int yBy) {
                                                          kBitmapUnflipped,
                                                          (LCDRect){.left=0, .top=0, .bottom=0, .right=0});
     if(alpha_collide == 1) {
+      current_vector.y = -current_vector.y;
       return;
     }
   }
@@ -72,6 +81,10 @@ void ball_move(int xBy, int yBy) {
      moveTargetX < BALL_MAX_X   &&
      moveTargetX > BALL_MIN_X) {
     pd->sprite->moveTo(ball_sprite, moveTargetX, moveTargetY);
+  }
+
+  if (current_vector.y > -BALL_T_VELOCITY) {
+    current_vector.y -= BALL_ACCEL;
   }
 }
 
