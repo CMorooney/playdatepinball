@@ -21,10 +21,13 @@ endif
 VPATH += src
 
 # List C source files here
-SRC = src/main.c
+SRC = src/main.c \
+      src/input.c \
+      src/flipper.c \
+      src/ball.c
 
 # List all user directories here
-UINCDIR = 
+UINCDIR = playbox2d
 
 # List user asm files
 UASRC = 
@@ -43,3 +46,5 @@ ULIBS =
 
 include $(SDK)/C_API/buildsupport/common.mk
 
+# compile universal binary for m1 mac
+DYLIB_FLAGS+=-arch x86_64 -arch arm64
