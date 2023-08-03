@@ -24,7 +24,8 @@ VPATH += src
 SRC = src/main.c \
       src/input.c \
       src/flipper.c \
-      src/ball.c
+      src/ball.c \
+      src/math.c
 
 # List all user directories here
 UINCDIR = playbox2d

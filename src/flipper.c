@@ -5,6 +5,13 @@
 
 PlaydateAPI* pd;
 
+#define FLIPPER_IMAGE_COUNT 8
+float flipper_angles[FLIPPER_IMAGE_COUNT] = { 26.6f, 18.8f, 10.0f, 0.0f, -6.4f, -14.9f, -22.3f, -29.1f };
+
+LCDBitmapTable* flipper_bmp_table;
+LCDSprite* flipper_r_sprite;
+LCDSprite* flipper_l_sprite;
+
 int current_flipper_frame_r = 0;
 int current_flipper_frame_l = 0;
 bool activating_flipper_r;
@@ -87,5 +94,13 @@ void update_flippers(void) {
   } else if(!is_button_held(kButtonA) && !activating_flipper_r) {
     deactivate_flipper(Right);
   }
+}
+
+float current_flipper_angle_l(void) {
+  return flipper_angles[current_flipper_frame_l];
+}
+
+float current_flipper_angle_r(void) {
+  return flipper_angles[current_flipper_frame_r];
 }
 

@@ -3,15 +3,15 @@
 
 #include "pd_api.h"
 
-#define FLIPPER_IMAGE_COUNT 8
-
 enum flipper { Left, Right };
-
-LCDBitmapTable* flipper_bmp_table;
-LCDSprite* flipper_r_sprite;
-LCDSprite* flipper_l_sprite;
 
 void init_flippers(PlaydateAPI* playdate);
 void update_flippers(void);
+
+float current_flipper_angle_l(void);
+float current_flipper_angle_r(void);
+
+void current_flipper_normal_l(float* normal_x, float* normal_y);
+void current_flipper_normal_r(float* normal_x, float* normal_y);
 
 #endif
