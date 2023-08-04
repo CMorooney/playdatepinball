@@ -7,8 +7,7 @@
 PlaydateAPI* pd;
 
 #define FLIPPER_IMAGE_COUNT 8
-float flipper_angles[FLIPPER_IMAGE_COUNT] = { 26.6f, 18.8f, 10.0f, 0.0f, -6.4f, -14.9f, -22.3f, -29.1f };
-float flipper_compliment_angles[FLIPPER_IMAGE_COUNT] = { 63.4f, 71.2, 80.0f, 90.0f, -83.6, 75.1, 67.7, 60.9 };
+float flipper_normals_r[FLIPPER_IMAGE_COUNT*2] = { -0.5f, -1, -0.329372f, -0.9442f, -0.20601f, -0.97855f, 0, -1, 0.182089f, -0.983282f, 0.304776f, -0.952424f, 0.413803, -0.910366f, 0.514496f, -0.857493f };
 
 LCDBitmapTable* flipper_bmp_table;
 LCDSprite* flipper_r_sprite;
@@ -98,23 +97,17 @@ void update_flippers(void) {
   }
 }
 
-float current_flipper_angle_l(void) {
-  return flipper_angles[current_flipper_frame_l];
-}
-
-float current_flipper_angle_r(void) {
-  return flipper_angles[current_flipper_frame_r];
-}
-
 Vector current_flipper_normal_l(void) {
-  float a = flipper_angles[current_flipper_frame_l];
-  float b = flipper_compliment_angles[current_flipper_frame_l];
-  return get_normal_for_right_triangle(a, b);
+  return (Vector) {
+    .x = -flipper_normals_r[current_flipper_frame_r],
+    .y = flipper_normals_r[current_flipper_frame_r + 1]
+  };
 }
 
 Vector current_flipper_normal_r(void) {
-  float a = flipper_angles[current_flipper_frame_r];
-  float b = flipper_angles[current_flipper_frame_r];
-  return get_normal_for_right_triangle(a, b);
+  return (Vector) {
+    .x = flipper_normals_r[current_flipper_frame_r],
+    .y = flipper_normals_r[current_flipper_frame_r + 1]
+  };
 }
 

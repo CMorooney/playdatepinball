@@ -1,13 +1,6 @@
 #include "math.h"
 #include <math.h>
 
-Vector get_normal_for_right_triangle(float alpha, float beta) {
-  Vector v1 = (Vector){ .x = cosf(alpha), .y = sinf(alpha) };
-  Vector v2 = (Vector){ .x = cosf(beta), .y = sinf(beta) };
-  Vector vH = add_vectors(v1, v2);
-  return normalize_vector(invert_vector(vH));
-}
-
 Vector add_vectors(Vector v1, Vector v2) {
   return (Vector) { .x = v1.x + v2.x, .y = v1.y + v2.y};
 }

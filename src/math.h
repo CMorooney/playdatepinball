@@ -3,7 +3,6 @@
 
 #include "types.h"
 
-Vector get_normal_for_right_triangle(float alpha, float beta);
 Vector add_vectors(Vector v1, Vector v2);
 Vector subtract_vectors(Vector v1, Vector v2);
 Vector divide_vector(Vector v, float by);

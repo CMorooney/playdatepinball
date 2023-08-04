@@ -2,6 +2,7 @@
 #include "flipper.h"
 #include "constants.h"
 #include "types.h"
+#include "math.h"
 
 #define BALL_RADIUS 10
 #define BALL_MIN_X BALL_RADIUS
@@ -64,7 +65,7 @@ void ball_move(float xBy, float yBy) {
 
     int alpha_collide = pd->graphics->checkMaskCollision(ball_bmp,
                                                          ball_bounds.x + xBy,
-                                                         ball_bounds.y+ yBy,
+                                                         ball_bounds.y + yBy,
                                                          kBitmapUnflipped,
                                                          colliderBmp,
                                                          collider_bounds.x,
@@ -72,7 +73,10 @@ void ball_move(float xBy, float yBy) {
                                                          kBitmapUnflipped,
                                                          (LCDRect){.left=0, .top=0, .bottom=0, .right=0});
     if(alpha_collide == 1) {
-      current_vector.y = -current_vector.y;
+      Vector flipper_normal = new_x > LCD_COLUMNS/2 ? current_flipper_normal_l() : current_flipper_normal_r();
+      Vector reflection = mirror_vector(normalize_vector(current_vector), flipper_normal);
+      pd->system->logToConsole("(%f, %f)", reflection.x, reflection.y);
+      current_vector = reflection;
       return;
     }
   }
