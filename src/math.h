@@ -1,8 +1,17 @@
 #ifndef MATH_HEADER
 #define MATH_HEADER
 
-#include <math.h>
+#include "types.h"
 
-void get_normal_for_right_triangle(float alpha, float beta, float* vector_x, float* vector_y);
+Vector get_normal_for_right_triangle(float alpha, float beta);
+Vector add_vectors(Vector v1, Vector v2);
+Vector subtract_vectors(Vector v1, Vector v2);
+Vector divide_vector(Vector v, float by);
+Vector multiply_vector(Vector v, float by);
+Vector invert_vector(Vector v);
+Vector normalize_vector(Vector v);
+Vector mirror_vector(Vector v, Vector normalizedVector);
+float get_magnitude(Vector v);
+float dot_product(Vector v1, Vector v2);
 
 #endif

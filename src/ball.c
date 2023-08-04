@@ -1,4 +1,5 @@
 #include "ball.h"
+#include "flipper.h"
 #include "constants.h"
 #include "types.h"
 
@@ -40,7 +41,7 @@ void reset_ball_pos(void) {
   pd->sprite->moveTo(ball_sprite, SCREEN_MID_X + 30, SCREEN_MID_Y-100);
 }
 
-void ball_move(int xBy, int yBy) {
+void ball_move(float xBy, float yBy) {
   PDRect ball_bounds = pd->sprite->getBounds(ball_sprite);
 
   float moveTargetX, moveTargetY;
@@ -62,8 +63,8 @@ void ball_move(int xBy, int yBy) {
     LCDBitmap* colliderBmp = pd->sprite->getImage(collision->other);
 
     int alpha_collide = pd->graphics->checkMaskCollision(ball_bmp,
-                                                         new_x,
-                                                         new_y,
+                                                         ball_bounds.x + xBy,
+                                                         ball_bounds.y+ yBy,
                                                          kBitmapUnflipped,
                                                          colliderBmp,
                                                          collider_bounds.x,

@@ -1,6 +1,7 @@
 #ifndef FLIPPER_HEADER
 #define FLIPPER_HEADER
 
+#include "types.h"
 #include "pd_api.h"
 
 enum flipper { Left, Right };
@@ -11,7 +12,7 @@ void update_flippers(void);
 float current_flipper_angle_l(void);
 float current_flipper_angle_r(void);
 
-void current_flipper_normal_l(float* normal_x, float* normal_y);
-void current_flipper_normal_r(float* normal_x, float* normal_y);
+Vector current_flipper_normal_l(void);
+Vector current_flipper_normal_r(void);
 
 #endif
