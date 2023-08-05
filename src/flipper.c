@@ -7,7 +7,15 @@
 PlaydateAPI* pd;
 
 #define FLIPPER_IMAGE_COUNT 8
-float flipper_normals_r[FLIPPER_IMAGE_COUNT*2] = { -0.5f, -1, -0.329372f, -0.9442f, -0.20601f, -0.97855f, 0, -1, 0.182089f, -0.983282f, 0.304776f, -0.952424f, 0.413803, -0.910366f, 0.514496f, -0.857493f };
+float flipper_normals_r[FLIPPER_IMAGE_COUNT*2] = { -0.5f, -1,
+                                                   -0.329372f, -0.9442f,
+                                                   -0.20601f, -0.97855f,
+                                                   0, -1,
+                                                   0.182089f, -0.983282f,
+                                                   0.304776f, -0.952424f,
+                                                   0.413803, -0.910366f,
+                                                   0.514496f, -0.857493f
+};
 
 LCDBitmapTable* flipper_bmp_table;
 LCDSprite* flipper_r_sprite;
@@ -98,16 +106,18 @@ void update_flippers(void) {
 }
 
 Vector current_flipper_normal_l(void) {
+  int i = current_flipper_frame_l*2;
   return (Vector) {
-    .x = -flipper_normals_r[current_flipper_frame_r],
-    .y = flipper_normals_r[current_flipper_frame_r + 1]
+    .x = -flipper_normals_r[i],
+    .y = flipper_normals_r[i+ 1]
   };
 }
 
 Vector current_flipper_normal_r(void) {
+  int i = current_flipper_frame_r*2;
   return (Vector) {
-    .x = flipper_normals_r[current_flipper_frame_r],
-    .y = flipper_normals_r[current_flipper_frame_r + 1]
+    .x = flipper_normals_r[i],
+    .y = flipper_normals_r[i + 1]
   };
 }
 

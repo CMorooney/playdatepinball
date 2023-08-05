@@ -13,6 +13,9 @@
 #define BALL_T_VELOCITY 3
 #define BALL_ACCEL 0.1f
 
+#define ANIMATE_ON 2
+#define VECTOR_MULTIPLIER 3
+
 Vector current_vector;
 
 PlaydateAPI* pd;
@@ -73,8 +76,10 @@ void ball_move(float xBy, float yBy) {
                                                          kBitmapUnflipped,
                                                          (LCDRect){.left=0, .top=0, .bottom=0, .right=0});
     if(alpha_collide == 1) {
-      Vector flipper_normal = new_x > LCD_COLUMNS/2 ? current_flipper_normal_l() : current_flipper_normal_r();
-      Vector reflection = mirror_vector(normalize_vector(current_vector), flipper_normal);
+      Vector flipper_normal = new_x < LCD_COLUMNS/2 ? current_flipper_normal_l() : current_flipper_normal_r();
+      Vector reflection = multiply_vector(flipper_normal, VECTOR_MULTIPLIER);
+      reflection.y = -reflection.y;
+      /* Vector reflection = mirror_vector(normalize_vector(current_vector), flipper_normal); */
       pd->system->logToConsole("(%f, %f)", reflection.x, reflection.y);
       current_vector = reflection;
       return;
@@ -93,7 +98,10 @@ void ball_move(float xBy, float yBy) {
   }
 }
 
-void update_ball(void) {
-  ball_move(current_vector.x, -current_vector.y);
+
+void update_ball(int frame) {
+  if(frame % ANIMATE_ON == 0) {
+    ball_move(current_vector.x, -current_vector.y);
+  }
 }
 

@@ -45,7 +45,7 @@ static int update(void* userdata) {
   update_flippers();
 
   // seems right to do this after flippers?
-  update_ball();
+  update_ball(frame);
 
   pd->sprite->updateAndDrawSprites();
   frame ++;
