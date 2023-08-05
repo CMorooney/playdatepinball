@@ -47,6 +47,10 @@ static int update(void* userdata) {
   // seems right to do this after flippers?
   update_ball(frame);
 
+  float ball_pos_x, ball_pos_y;
+  get_current_ball_pos(&ball_pos_x, &ball_pos_y);
+  pd->graphics->setDrawOffset(-ball_pos_x+(LCD_COLUMNS/2), -ball_pos_y+(LCD_ROWS/2));
+
   pd->sprite->updateAndDrawSprites();
   frame ++;
   return 1;

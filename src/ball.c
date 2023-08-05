@@ -10,13 +10,15 @@
 #define BALL_MAX_X LCD_COLUMNS-BALL_RADIUS
 #define BALL_MAX_Y LCD_ROWS-BALL_RADIUS
 
-#define BALL_T_VELOCITY 3
-#define BALL_ACCEL 0.1f
+#define BALL_T_VELOCITY 4
+#define BALL_ACCEL 0.5f
+#define BALL_X_FRICTION 0.5f
 
-#define ANIMATE_ON 2
-#define VECTOR_MULTIPLIER 3
+#define ANIMATE_ON 4
+#define VECTOR_MULTIPLIER 2
 
 Vector current_vector;
+float current_x_pos, current_y_pos;
 
 PlaydateAPI* pd;
 
@@ -48,14 +50,16 @@ void reset_ball_pos(void) {
 void ball_move(float xBy, float yBy) {
   PDRect ball_bounds = pd->sprite->getBounds(ball_sprite);
 
+  current_x_pos = ball_bounds.x + BALL_RADIUS;
+  current_y_pos = ball_bounds.y + BALL_RADIUS;
+
   float moveTargetX, moveTargetY;
-  int colliders_len;
   int x_modifier = xBy < 0 ? -BALL_RADIUS : BALL_RADIUS;
   int y_modifier = yBy < 0 ? -BALL_RADIUS : BALL_RADIUS;
   int new_x = ball_bounds.x + x_modifier + xBy;
   int new_y = ball_bounds.y + y_modifier + yBy;
 
-
+  int colliders_len;
   SpriteCollisionInfo* collision = pd->sprite->checkCollisions(ball_sprite,
                                                                new_x,
                                                                new_y,
@@ -80,24 +84,39 @@ void ball_move(float xBy, float yBy) {
       Vector reflection = multiply_vector(flipper_normal, VECTOR_MULTIPLIER);
       reflection.y = -reflection.y;
       /* Vector reflection = mirror_vector(normalize_vector(current_vector), flipper_normal); */
-      pd->system->logToConsole("(%f, %f)", reflection.x, reflection.y);
+      /* pd->system->logToConsole("(%f, %f)", reflection.x, reflection.y); */
       current_vector = reflection;
       return;
     }
   }
 
-  if(moveTargetY < BALL_MAX_Y   &&
-     moveTargetY > BALL_MIN_Y   &&
-     moveTargetX < BALL_MAX_X   &&
-     moveTargetX > BALL_MIN_X) {
+  /* if(moveTargetX < BALL_MAX_X   && */
+     /* moveTargetX > BALL_MIN_X) { */
     pd->sprite->moveTo(ball_sprite, moveTargetX, moveTargetY);
-  }
+  /* } */
 
   if (current_vector.y > -BALL_T_VELOCITY) {
     current_vector.y -= BALL_ACCEL;
   }
+
+  if(current_vector.x > 0) {
+    current_vector.x -= BALL_X_FRICTION;
+  } else if(current_vector.x < 0) {
+    current_vector.x += BALL_X_FRICTION;
+  }
+
+  if(current_vector.x < BALL_X_FRICTION ||
+     current_vector.x > -BALL_X_FRICTION) {
+    current_vector.x = 0;
+  }
 }
 
+Vector current_ball_pos;
+
+void get_current_ball_pos(float* x, float* y) {
+  *x = current_x_pos;
+  *y = current_y_pos;
+}
 
 void update_ball(int frame) {
   if(frame % ANIMATE_ON == 0) {
